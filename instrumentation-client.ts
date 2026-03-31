@@ -3,6 +3,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
+import posthog from "posthog-js";
 
 Sentry.init({
   dsn: "https://55944bf2d881307627576480e791e182@o4511141633654784.ingest.us.sentry.io/4511141637455872",
@@ -28,4 +29,18 @@ Sentry.init({
   sendDefaultPii: true,
 });
 
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+posthog.init(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN!, {
+  api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  capture_pageview: false, // handled manually via onRouterTransitionStart
+  capture_pageleave: true,
+});
+
+export function onRouterTransitionStart(
+  url: string,
+  navigationType: "push" | "replace" | "traverse"
+) {
+  Sentry.captureRouterTransitionStart(url, navigationType);
+  posthog.capture("$pageview", {
+    $current_url: window.location.origin + url,
+  });
+}
