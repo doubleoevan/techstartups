@@ -1,0 +1,12 @@
+{
+  "name": "@techstartups/db",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./client.ts",
+    "./types": "./types.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}
