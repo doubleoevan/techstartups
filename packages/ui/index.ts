@@ -1,3 +1,5 @@
-// @techstartups/ui — shared component library
-// shadcn/ui components are installed here in TASK-002.
-export {};
+export { Button, buttonVariants } from "./components/button"
+export { Badge, badgeVariants } from "./components/badge"
+export { Input } from "./components/input"
+export { Separator } from "./components/separator"
+export { cn } from "./lib/utils"
