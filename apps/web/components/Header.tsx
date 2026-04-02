@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { useTheme } from "next-themes"
-import { Moon, Sun } from "lucide-react"
-import { Button } from "@techstartups/ui"
+import Link from 'next/link'
+import { useTheme } from 'next-themes'
+import { Moon, Sun } from 'lucide-react'
+import { Button } from '@techstartups/ui'
 
 export function Header() {
   const { theme, setTheme } = useTheme()
@@ -15,12 +15,14 @@ export function Header() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
             TS
           </div>
-          <span className="text-sm font-semibold">TechStartups<span className="text-primary">.ai</span></span>
+          <span className="text-sm font-semibold">
+            TechStartups<span className="text-primary">.ai</span>
+          </span>
         </Link>
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           aria-label="Toggle theme"
         >
           <Sun className="dark:hidden" />

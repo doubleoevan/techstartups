@@ -1,6 +1,6 @@
-import { NextRequest } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-import { z } from "zod"
+import { NextRequest } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { z } from 'zod'
 
 const emailSchema = z.string().email()
 
@@ -45,10 +45,10 @@ const INVALID_HTML = `<!DOCTYPE html>
 </body>
 </html>`
 
-const HTML_HEADERS = { "Content-Type": "text/html" }
+const HTML_HEADERS = { 'Content-Type': 'text/html' }
 
 export async function GET(request: NextRequest) {
-  const emailParam = request.nextUrl.searchParams.get("email")
+  const emailParam = request.nextUrl.searchParams.get('email')
   const parseResult = emailSchema.safeParse(emailParam)
 
   if (!parseResult.success) {
@@ -63,10 +63,10 @@ export async function GET(request: NextRequest) {
   )
 
   await supabase
-    .from("waitlist")
+    .from('waitlist')
     .update({ unsubscribed_at: new Date().toISOString() })
-    .eq("email", email)
-    .is("unsubscribed_at", null)
+    .eq('email', email)
+    .is('unsubscribed_at', null)
 
   return new Response(UNSUBSCRIBED_HTML, { status: 200, headers: HTML_HEADERS })
 }

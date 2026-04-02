@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Check } from "lucide-react"
-import { Button, Input } from "@techstartups/ui"
-import { cn } from "@/lib/utils"
+import { useState } from 'react'
+import { Check } from 'lucide-react'
+import { Button, Input } from '@techstartups/ui'
+import { cn } from '@/lib/utils'
 
-type UserType = "jobSeeker" | "founder" | "investor"
+type UserType = 'jobSeeker' | 'founder' | 'investor'
 
 interface Plan {
   name: string
@@ -25,77 +25,126 @@ interface UserTier {
 
 const USER_TIERS: UserTier[] = [
   {
-    id: "jobSeeker",
-    label: "Job seeker",
-    icon: "🎯",
-    tag: "Find stable, growing companies",
-    description: "Find stable, growing companies before job postings go live. Hiring signals, runway health, culture analysis.",
+    id: 'jobSeeker',
+    label: 'Job seeker',
+    icon: '🎯',
+    tag: 'Find stable, growing companies',
+    description:
+      'Find stable, growing companies before job postings go live. Hiring signals, runway health, culture analysis.',
     plans: [
       {
-        name: "Career",
+        name: 'Career',
         price: null,
-        features: ["Browse startup profiles", "Basic momentum score", "3 AI snapshots/month", "Public leaderboard"],
+        features: [
+          'Browse startup profiles',
+          'Basic momentum score',
+          '3 AI snapshots/month',
+          'Public leaderboard',
+        ],
       },
       {
-        name: "Career Starter",
+        name: 'Career Starter',
         price: 9,
-        features: ["Full momentum score + trend", "20 AI snapshots/month", "Hiring signal alerts", "Salary estimates", "Watchlist (10 startups)"],
+        features: [
+          'Full momentum score + trend',
+          '20 AI snapshots/month',
+          'Hiring signal alerts',
+          'Salary estimates',
+          'Watchlist (10 startups)',
+        ],
       },
       {
-        name: "Career Pro",
+        name: 'Career Pro',
         price: 19,
         isPopular: true,
-        features: ["Unlimited AI snapshots", "Pre-signal alerts", "Layoff risk indicator", "Interview prep AI", "Unlimited watchlist"],
+        features: [
+          'Unlimited AI snapshots',
+          'Pre-signal alerts',
+          'Layoff risk indicator',
+          'Interview prep AI',
+          'Unlimited watchlist',
+        ],
       },
     ],
   },
   {
-    id: "founder",
-    label: "Founder",
-    icon: "🚀",
-    tag: "Raise smarter, get discovered",
-    description: "Raise smarter. Track competitors, get discovered by investors, close your round with AI-powered tools.",
+    id: 'founder',
+    label: 'Founder',
+    icon: '🚀',
+    tag: 'Raise smarter, get discovered',
+    description:
+      'Raise smarter. Track competitors, get discovered by investors, close your round with AI-powered tools.',
     plans: [
       {
-        name: "Founder",
+        name: 'Founder',
         price: null,
-        features: ["Claim startup profile", "Basic public page", "Community feed", "Blog access"],
+        features: ['Claim startup profile', 'Basic public page', 'Community feed', 'Blog access'],
       },
       {
-        name: "Founder Starter",
+        name: 'Founder Starter',
         price: 19,
-        features: ["Full momentum score", "Competitor tracking (3)", "AI startup analysis", "Investor interest signals", "Fundraising Mode basic"],
+        features: [
+          'Full momentum score',
+          'Competitor tracking (3)',
+          'AI startup analysis',
+          'Investor interest signals',
+          'Fundraising Mode basic',
+        ],
       },
       {
-        name: "Founder Pro",
+        name: 'Founder Pro',
         price: 49,
         isPopular: true,
-        features: ["Unlimited competitors", "AI investor matching", "Private data room", "Pitch deck scoring", "Investor memo + term sheet AI"],
+        features: [
+          'Unlimited competitors',
+          'AI investor matching',
+          'Private data room',
+          'Pitch deck scoring',
+          'Investor memo + term sheet AI',
+        ],
       },
     ],
   },
   {
-    id: "investor",
-    label: "Investor",
-    icon: "💎",
-    tag: "Find the next big thing early",
-    description: "Source deals before they're obvious. Real-time deal flow, AI due diligence, direct founder introductions.",
+    id: 'investor',
+    label: 'Investor',
+    icon: '💎',
+    tag: 'Find the next big thing early',
+    description:
+      "Source deals before they're obvious. Real-time deal flow, AI due diligence, direct founder introductions.",
     plans: [
       {
-        name: "Investor",
+        name: 'Investor',
         price: null,
-        features: ["Browse public profiles", "Basic momentum scores", "Public leaderboard", "3 AI deep dives/month"],
+        features: [
+          'Browse public profiles',
+          'Basic momentum scores',
+          'Public leaderboard',
+          '3 AI deep dives/month',
+        ],
       },
       {
-        name: "Investor Starter",
+        name: 'Investor Starter',
         price: 49,
-        features: ["Unlimited AI deep dives", "Full momentum + trajectory", "Deal flow feed", "Thesis filter", "Due diligence reports"],
+        features: [
+          'Unlimited AI deep dives',
+          'Full momentum + trajectory',
+          'Deal flow feed',
+          'Thesis filter',
+          'Due diligence reports',
+        ],
       },
       {
-        name: "Investor Pro",
+        name: 'Investor Pro',
         price: 99,
         isPopular: true,
-        features: ["Mutual opt-in intros", "Private data room", "Portfolio dashboard", "VC activity tracker", "API access"],
+        features: [
+          'Mutual opt-in intros',
+          'Private data room',
+          'Portfolio dashboard',
+          'VC activity tracker',
+          'API access',
+        ],
       },
     ],
   },
@@ -103,7 +152,7 @@ const USER_TIERS: UserTier[] = [
 
 export default function HomePage() {
   const [userType, setUserType] = useState<UserType | null>(null)
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -112,7 +161,9 @@ export default function HomePage() {
     const next = userType === type ? null : type
     setUserType(next)
     if (next) {
-      document.getElementById(`pricing-${next}`)?.scrollIntoView({ behavior: "smooth", block: "start" })
+      document
+        .getElementById(`pricing-${next}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
@@ -124,19 +175,19 @@ export default function HomePage() {
     setIsLoading(true)
     setErrorMessage(null)
     try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, user_type: userType }),
       })
       if (response.ok) {
         setIsSubmitted(true)
       } else {
-        const data = await response.json() as { error?: string }
-        setErrorMessage(data.error ?? "Something went wrong. Please try again.")
+        const data = (await response.json()) as { error?: string }
+        setErrorMessage(data.error ?? 'Something went wrong. Please try again.')
       }
     } catch {
-      setErrorMessage("Something went wrong. Please try again.")
+      setErrorMessage('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -144,7 +195,6 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col">
-
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
         <span className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
@@ -167,10 +217,10 @@ export default function HomePage() {
               key={id}
               onClick={() => onUserClick(id)}
               className={cn(
-                "cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all",
+                'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
                 userType === id
-                  ? "border-transparent bg-primary text-primary-foreground"
-                  : "border-border bg-background text-foreground hover:bg-muted"
+                  ? 'border-transparent bg-primary text-primary-foreground'
+                  : 'border-border bg-background text-foreground hover:bg-muted'
               )}
             >
               {icon} {label}
@@ -192,7 +242,7 @@ export default function HomePage() {
                 className="flex-1"
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Joining…" : "Join waitlist"}
+                {isLoading ? 'Joining…' : 'Join waitlist'}
               </Button>
             </form>
           ) : (
@@ -200,9 +250,7 @@ export default function HomePage() {
               You're on the list — we'll be in touch soon.
             </p>
           )}
-          {errorMessage && (
-            <p className="text-sm text-destructive">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
           <p className="text-xs text-muted-foreground">
             14-day free trial at launch · No credit card needed to join the waitlist
           </p>
@@ -217,8 +265,8 @@ export default function HomePage() {
               key={id}
               onClick={() => onUserClick(id)}
               className={cn(
-                "cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300",
-                userType && userType !== id ? "opacity-40" : "opacity-100"
+                'cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300',
+                userType && userType !== id ? 'opacity-40' : 'opacity-100'
               )}
             >
               <div className="mb-3 text-3xl">{icon}</div>
@@ -254,63 +302,67 @@ export default function HomePage() {
               key={id}
               id={`pricing-${id}`}
               className={cn(
-                "flex flex-col gap-4 scroll-mt-20 transition-opacity duration-300",
-                userType && userType !== id ? "opacity-40" : "opacity-100"
+                'flex scroll-mt-20 flex-col gap-4 transition-opacity duration-300',
+                userType && userType !== id ? 'opacity-40' : 'opacity-100'
               )}
             >
               <div className="flex items-center gap-3">
-                <h3 className="font-semibold">{icon} {label}</h3>
+                <h3 className="font-semibold">
+                  {icon} {label}
+                </h3>
                 <span className="text-sm text-muted-foreground">{tag}</span>
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {plans.map(({ name, price, isPopular, features }) => (
-                <div
-                  key={name}
-                  className={cn(
-                    "flex flex-col rounded-xl border p-5",
-                    isPopular
-                      ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                      : "border-border bg-card"
-                  )}
-                >
-                  <div className="mb-4 flex items-start justify-between gap-2">
-                    <div>
-                      <p className="font-semibold">{name}</p>
-                      <p className="text-2xl font-bold">
-                        {price === null ? "Free" : `$${price}`}
-                        {price !== null && (
-                          <span className="text-sm font-normal text-muted-foreground">/mo</span>
-                        )}
-                      </p>
-                    </div>
-                    {isPopular && (
-                      <span className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
-                        Most popular
-                      </span>
+                {plans.map(({ name, price, isPopular, features }) => (
+                  <div
+                    key={name}
+                    className={cn(
+                      'flex flex-col rounded-xl border p-5',
+                      isPopular
+                        ? 'border-primary bg-primary/5 ring-1 ring-primary/20'
+                        : 'border-border bg-card'
                     )}
-                  </div>
-
-                  <ul className="mb-6 flex flex-col gap-1.5 text-sm text-muted-foreground">
-                    {features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    variant={isPopular ? "default" : "outline"}
-                    className="mt-auto w-full"
-                    onClick={() =>
-                      (document.getElementById("waitlist-email") as HTMLInputElement | null)?.focus({ preventScroll: false })
-                    }
                   >
-                    {price === null ? "Get started free" : "Join waitlist"}
-                  </Button>
-                </div>
-              ))}
+                    <div className="mb-4 flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold">{name}</p>
+                        <p className="text-2xl font-bold">
+                          {price === null ? 'Free' : `$${price}`}
+                          {price !== null && (
+                            <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                          )}
+                        </p>
+                      </div>
+                      {isPopular && (
+                        <span className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
+                          Most popular
+                        </span>
+                      )}
+                    </div>
+
+                    <ul className="mb-6 flex flex-col gap-1.5 text-sm text-muted-foreground">
+                      {features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2">
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Button
+                      variant={isPopular ? 'default' : 'outline'}
+                      className="mt-auto w-full"
+                      onClick={() =>
+                        (
+                          document.getElementById('waitlist-email') as HTMLInputElement | null
+                        )?.focus({ preventScroll: false })
+                      }
+                    >
+                      {price === null ? 'Get started free' : 'Join waitlist'}
+                    </Button>
+                  </div>
+                ))}
               </div>
             </div>
           ))}

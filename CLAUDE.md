@@ -50,7 +50,6 @@ techstartupsai/
 
 ## Current routes
 
-
 | URL                   | File                                    | Component               | Status      |
 | --------------------- | --------------------------------------- | ----------------------- | ----------- |
 | `/`                   | `app/(public)/page.tsx`                 | `HomePage`              | Built       |
@@ -63,7 +62,6 @@ techstartupsai/
 | `/dashboard/founder`  | `app/(app)/dashboard/founder/page.tsx`  | `FounderDashboardPage`  | Pending     |
 | `/dashboard/investor` | `app/(app)/dashboard/investor/page.tsx` | `InvestorDashboardPage` | Pending     |
 | `/settings`           | `app/(app)/settings/page.tsx`           | `SettingsPage`          | Pending     |
-
 
 ## Coding conventions
 
@@ -148,7 +146,7 @@ Always read the relevant Notion page before building a feature:
 
 ## Refactor Log
 
-Whenever a refactor is made during implementation — whether initiated by Claude Code 
+Whenever a refactor is made during implementation — whether initiated by Claude Code
 
 or requested via Cursor review — log it here before ending the session.
 
@@ -176,16 +174,19 @@ Format:
 
 ## Refactor Log
 
-Whenever a refactor is made during implementation — whether initiated by Claude Code 
+Whenever a refactor is made during implementation — whether initiated by Claude Code
 or requested via Cursor review — log it here before ending the session.
 
 Format:
+
 ### [DATE] [File or module affected]
+
 - **What changed:** Brief description
 - **Why:** Reason (e.g. simplify, performance, convention alignment)
 - **Impact:** Any downstream files or patterns affected
 
 ## Workflow
+
 - Tasks come from Notion Sprint / Tasks page
 - Claude Code (Warp) implements; Cursor is used for review and inline edits
 - After Cursor review, Claude Code applies the requested changes

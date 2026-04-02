@@ -1,3 +1,3 @@
-import posthog from "posthog-js";
+import posthog from 'posthog-js'
 
-export default posthog;
+export default posthog

@@ -27,16 +27,19 @@ All schema changes are version-controlled as SQL files in `supabase/migrations/`
 ### One-time setup
 
 1. Install Supabase CLI:
+
    ```bash
    brew install supabase/tap/supabase
    ```
 
 2. Log in to Supabase:
+
    ```bash
    supabase login
    ```
 
 3. Set your project ref in your shell (or add to root `.env.local`):
+
    ```bash
    export SUPABASE_PROJECT_REF=xucigljidauhxskrglds
    ```
@@ -50,6 +53,7 @@ All schema changes are version-controlled as SQL files in `supabase/migrations/`
 ### Adding a new table
 
 1. Create a new migration file with a UTC timestamp prefix:
+
    ```
    supabase/migrations/YYYYMMDDHHMMSS_describe_change.sql
    ```
@@ -63,8 +67,8 @@ All schema changes are version-controlled as SQL files in `supabase/migrations/`
 
 ### Scripts
 
-| Script | What it does |
-|--------|--------------|
-| `pnpm db:link` | Links repo to hosted Supabase project (run once per machine) |
-| `pnpm db:push` | Applies all pending migrations to prod |
+| Script          | What it does                                                     |
+| --------------- | ---------------------------------------------------------------- |
+| `pnpm db:link`  | Links repo to hosted Supabase project (run once per machine)     |
+| `pnpm db:push`  | Applies all pending migrations to prod                           |
 | `pnpm db:reset` | Resets the local Supabase instance and re-applies all migrations |

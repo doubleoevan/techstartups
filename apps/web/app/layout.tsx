@@ -1,18 +1,18 @@
-import "./globals.css";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import { cn } from "@/lib/utils";
+import './globals.css'
+import { Geist } from 'next/font/google'
+import { ThemeProvider } from 'next-themes'
+import { cn } from '@/lib/utils'
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
+    <html lang="en" className={cn('font-sans', geist.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

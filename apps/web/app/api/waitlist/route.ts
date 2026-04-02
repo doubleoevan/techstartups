@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-import { Resend } from "resend"
-import { z } from "zod"
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { Resend } from 'resend'
+import { z } from 'zod'
 
-const POSTGRES_UNIQUE_VIOLATION = "23505"
+const POSTGRES_UNIQUE_VIOLATION = '23505'
 
 const waitlistSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email('Invalid email address'),
   user_type: z.string().nullable().optional(),
 })
 
@@ -15,10 +15,7 @@ export async function POST(request: Request) {
   const result = waitlistSchema.safeParse(body)
 
   if (!result.success) {
-    return NextResponse.json(
-      { error: "Invalid email address" },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
   }
 
   const { email, user_type } = result.data
@@ -28,21 +25,16 @@ export async function POST(request: Request) {
     process.env.SUPABASE_SECRET_KEY!
   )
 
-  const { error: insertError } = await supabase
-    .from("waitlist")
-    .insert({ email })
+  const { error: insertError } = await supabase.from('waitlist').insert({ email })
 
   if (insertError) {
     // Postgres unique violation
     if (insertError.code === POSTGRES_UNIQUE_VIOLATION) {
-      return NextResponse.json(
-        { error: "Already on the waitlist" },
-        { status: 409 }
-      )
+      return NextResponse.json({ error: 'Already on the waitlist' }, { status: 409 })
     }
-    console.error("Waitlist insert error:", insertError)
+    console.error('Waitlist insert error:', insertError)
     return NextResponse.json(
-      { error: "Failed to join the waitlist. Please try again." },
+      { error: 'Failed to join the waitlist. Please try again.' },
       { status: 500 }
     )
   }
@@ -50,7 +42,7 @@ export async function POST(request: Request) {
   const resend = new Resend(process.env.RESEND_API_KEY)
   await Promise.all([
     resend.emails.send({
-      from: "TechStartups AI <hello@techstartups.ai>",
+      from: 'TechStartups AI <hello@techstartups.ai>',
       to: email,
       subject: "You're on the TechStartups AI waitlist",
       html: `
@@ -81,13 +73,13 @@ export async function POST(request: Request) {
       `,
     }),
     resend.emails.send({
-      from: "TechStartups AI <hello@techstartups.ai>",
-      to: "evan@techstartups.ai",
-      subject: "New waitlist signup",
+      from: 'TechStartups AI <hello@techstartups.ai>',
+      to: 'evan@techstartups.ai',
+      subject: 'New waitlist signup',
       html: `
         <p><strong>New waitlist signup</strong></p>
         <p>Email: ${email}</p>
-        ${user_type ? `<p>User type: ${user_type}</p>` : ""}
+        ${user_type ? `<p>User type: ${user_type}</p>` : ''}
       `,
     }),
   ])
