@@ -57,9 +57,9 @@ export async function POST(request: Request) {
         <div style="background:#f4f3ef;padding:0;margin:0;font-family:sans-serif;">
           <div style="max-width:560px;margin:0 auto;padding:48px;">
 
-            <div style="margin-bottom:36px;">
+            <div style="margin-bottom:20px;">
               <div style="width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:8px;display:inline-block;text-align:center;line-height:32px;font-size:16px;vertical-align:middle;">🚀</div>
-              <span style="font-size:15px;font-weight:500;color:#0f1117;vertical-align:middle;padding-left:10px;">Tech<span style="color:#6366f1;">Startups</span>.ai</span>
+              <span style="font-size:15px;font-weight:500;color:#0f1117;vertical-align:middle;padding-left:6px;">Tech<span style="color:#6366f1;">Startups</span>.ai</span>
             </div>
 
             <div style="display:inline-block;background:#e8f0fe;color:#3b5bdb;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-bottom:24px;">Early Access</div>
@@ -69,18 +69,9 @@ export async function POST(request: Request) {
             <hr style="border:none;border-top:1px solid #e0ded8;margin:32px 0;" />
 
             <div style="margin-bottom:36px;">
-              <div style="padding-left:20px;position:relative;margin-bottom:20px;">
-                <span style="position:absolute;left:0;top:7px;width:6px;height:6px;background:#6366f1;border-radius:50%;display:inline-block;"></span>
-                <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;">Early access to AI-powered startup profiles and momentum scores</p>
-              </div>
-              <div style="padding-left:20px;position:relative;margin-bottom:20px;">
-                <span style="position:absolute;left:0;top:7px;width:6px;height:6px;background:#6366f1;border-radius:50%;display:inline-block;"></span>
-                <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;">Founding member pricing when we launch paid tiers</p>
-              </div>
-              <div style="padding-left:20px;position:relative;">
-                <span style="position:absolute;left:0;top:7px;width:6px;height:6px;background:#6366f1;border-radius:50%;display:inline-block;"></span>
-                <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;">We'll notify you the moment the doors open</p>
-              </div>
+              <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0 0 16px;"><span style="display:inline-block;width:6px;height:6px;background:#6366f1;border-radius:50%;vertical-align:middle;margin-right:10px;"></span>Early access to AI-powered startup profiles and momentum scores</p>
+              <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0 0 16px;"><span style="display:inline-block;width:6px;height:6px;background:#6366f1;border-radius:50%;vertical-align:middle;margin-right:10px;"></span>Founding member pricing when we launch paid tiers</p>
+              <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;"><span style="display:inline-block;width:6px;height:6px;background:#6366f1;border-radius:50%;vertical-align:middle;margin-right:10px;"></span>We'll notify you the moment the doors open</p>
             </div>
 
             <p style="font-size:12px;color:#aaa;margin:0;padding-top:24px;border-top:1px solid #e0ded8;">Sent from <a href="mailto:hello@techstartups.ai" style="color:#6366f1;text-decoration:none;">hello@techstartups.ai</a> · You're receiving this because you signed up at techstartups.ai · <a href="#" style="color:#6366f1;text-decoration:none;">Unsubscribe</a></p>
