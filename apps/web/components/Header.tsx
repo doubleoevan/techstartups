@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { Moon, Sun } from 'lucide-react'
@@ -12,9 +13,7 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border bg-background">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-            TS
-          </div>
+          <Image src="/logo.svg" alt="TechStartups.ai" width={32} height={32} />
           <span className="text-sm font-semibold">
             TechStartups<span className="text-primary">.ai</span>
           </span>

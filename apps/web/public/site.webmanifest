@@ -1,0 +1,24 @@
+{
+  "name": "TechStartups.ai",
+  "short_name": "TS.ai",
+  "description": "AI-powered startup intelligence for founders, investors, and job seekers.",
+  "start_url": "/",
+  "display": "standalone",
+  "lang": "en-US",
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
