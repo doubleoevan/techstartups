@@ -6,12 +6,22 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
     "db:link": "dotenv -e .env.local -- sh -c 'supabase link --project-ref $SUPABASE_PROJECT_REF'",
     "db:push": "dotenv -e .env.local -- supabase db push",
     "db:reset": "dotenv -e .env.local -- supabase db reset"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "latest"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css,md,yaml,yml}": "prettier --write"
   }
 }
