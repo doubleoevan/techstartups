@@ -32,7 +32,7 @@ const USER_TIERS: UserTier[] = [
     description: "Find stable, growing companies before job postings go live. Hiring signals, runway health, culture analysis.",
     plans: [
       {
-        name: "Free",
+        name: "Career",
         price: null,
         features: ["Browse startup profiles", "Basic momentum score", "3 AI snapshots/month", "Public leaderboard"],
       },
@@ -57,7 +57,7 @@ const USER_TIERS: UserTier[] = [
     description: "Raise smarter. Track competitors, get discovered by investors, close your round with AI-powered tools.",
     plans: [
       {
-        name: "Free",
+        name: "Founder",
         price: null,
         features: ["Claim startup profile", "Basic public page", "Community feed", "Blog access"],
       },
@@ -82,17 +82,17 @@ const USER_TIERS: UserTier[] = [
     description: "Source deals before they're obvious. Real-time deal flow, AI due diligence, direct founder introductions.",
     plans: [
       {
-        name: "Free",
+        name: "Investor",
         price: null,
         features: ["Browse public profiles", "Basic momentum scores", "Public leaderboard", "3 AI deep dives/month"],
       },
       {
-        name: "Angel",
+        name: "Investor Starter",
         price: 49,
         features: ["Unlimited AI deep dives", "Full momentum + trajectory", "Deal flow feed", "Thesis filter", "Due diligence reports"],
       },
       {
-        name: "Angel Pro",
+        name: "Investor Pro",
         price: 99,
         isPopular: true,
         features: ["Mutual opt-in intros", "Private data room", "Portfolio dashboard", "VC activity tracker", "API access"],
