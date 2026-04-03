@@ -2,14 +2,22 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { ThemeToggle } from './ThemeToggle'
 
+const NAV_ITEMS = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'About', href: '/about' },
+]
+
 export function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { open: openModal } = useJoinWaitlistModal()
+  const pathname = usePathname()
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -51,20 +59,19 @@ export function NavMenu() {
         )}
       >
         <nav className="flex flex-col gap-1 p-2">
-          <Link
-            href="/blog"
-            onClick={() => setIsMenuOpen(false)}
-            className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            Blog
-          </Link>
-          <Link
-            href="/about"
-            onClick={() => setIsMenuOpen(false)}
-            className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            About
-          </Link>
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setIsMenuOpen(false)}
+              className={cn(
+                'rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-foreground',
+                pathname === item.href ? 'font-semibold text-foreground' : 'text-muted-foreground'
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
           <button
             onClick={() => {
               setIsMenuOpen(false)

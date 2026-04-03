@@ -11,7 +11,7 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl px-4 py-16">
       <div className="mb-12">
         <h1 className="mb-2 text-3xl font-bold tracking-tight">About</h1>
-        <p className="text-muted-foreground">Coming soon.</p>
+        <p className="text-muted-foreground">Coming soon...</p>
       </div>
     </div>
   )
