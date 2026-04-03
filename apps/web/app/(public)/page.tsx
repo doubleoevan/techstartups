@@ -220,7 +220,7 @@ export default function HomePage() {
                 'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
                 userType === id
                   ? 'border-transparent bg-primary text-primary-foreground'
-                  : 'border-border bg-background text-foreground hover:bg-muted'
+                  : 'border-border bg-card text-foreground hover:bg-muted'
               )}
             >
               {icon} {label}
