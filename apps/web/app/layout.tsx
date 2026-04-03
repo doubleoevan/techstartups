@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { cn } from '@/lib/utils'
+import { Header } from '@/components/Header'
+import { JoinWaitlistModal } from '@/components/JoinWaitlistModal/JoinWaitlistModal'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -50,7 +52,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={cn('font-sans', geist.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            {children}
+            <JoinWaitlistModal />
+          </div>
         </ThemeProvider>
       </body>
     </html>

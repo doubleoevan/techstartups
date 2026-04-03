@@ -19,6 +19,7 @@ const FOOTER_LINKS = [
   { label: 'Privacy', href: '/privacy' },
   { label: 'Terms', href: '/terms' },
   { label: 'Blog', href: '/blog' },
+  { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -51,7 +52,7 @@ export function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-6">
         {/* Row 1 — social icons */}
-        <div className="mb-4 flex items-center justify-center gap-5">
+        <div className="mb-4 flex flex-wrap items-center justify-center gap-5">
           {SOCIAL_LINKS.map(({ title, href, icon: Icon }) => (
             <a
               key={title}
