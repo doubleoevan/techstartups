@@ -157,7 +157,8 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  function onUserClick(type: UserType) {
+  function onUserClick(event: React.MouseEvent, type: UserType) {
+    event.stopPropagation()
     const next = userType === type ? null : type
     setUserType(next)
     if (next) {
@@ -194,7 +195,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" onClick={() => setUserType(null)}>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
         <span className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
@@ -215,7 +216,7 @@ export default function HomePage() {
           {USER_TIERS.map(({ id, icon, label }) => (
             <button
               key={id}
-              onClick={() => onUserClick(id)}
+              onClick={(event) => onUserClick(event, id)}
               className={cn(
                 'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
                 userType === id
@@ -263,7 +264,7 @@ export default function HomePage() {
           {USER_TIERS.map(({ id, icon, label, description }) => (
             <div
               key={id}
-              onClick={() => onUserClick(id)}
+              onClick={(event) => onUserClick(event, id)}
               className={cn(
                 'cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300',
                 userType && userType !== id ? 'opacity-40' : 'opacity-100'
