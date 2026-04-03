@@ -88,6 +88,30 @@ techstartupsai/
 - Exception: well-established domain abbreviations that are clearer than the full word (`url`, `id`, `api`, `html`, `css`, `sdk`) are fine.
 - **Boolean variables and props must be prefixed with `is`, `has`, `can`, `should`, or `will`.** Examples: `isPopular`, `isLoading`, `hasError`, `canSubmit`.
 
+## Comment style
+
+Reference commit: `0367a955` (`add comments for readibility`)
+
+- Use `//` comments, not JSDoc `/** */`, even for exported items
+- Place the comment **above** the block it describes — never inline at the end of a line
+- One comment per logical group of lines; the comment acts as the visual separator (no blank line needed between comment and code)
+- Keep comments short and lowercase: `// close the menu on escape key press`, `// parse the request body`
+- JSX section comments use `{/* section name */}` — simple, no decorators or dividers
+
+```typescript
+// ✅ correct style
+// parse the request body
+const body: unknown = await request.json()
+const result = schema.safeParse(body)
+
+// handle errors
+if (!result.success) {
+  return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+}
+```
+
+- **Event handler functions use the `on` prefix**: `onClickUserType`, `onJoinWaitlist`, `onThemeClick`, `onPageKeyPress`
+
 ## Brace style
 
 - **Always use curly braces for if/else blocks — even single-line ones.** Never omit braces.
