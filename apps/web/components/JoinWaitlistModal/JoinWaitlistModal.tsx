@@ -9,7 +9,7 @@ type RoleValue = 'job_seeker' | 'founder' | 'investor' | ''
 type WaitlistErrorResponse = { error?: string }
 
 export function JoinWaitlistModal() {
-  const { isOpen, close } = useJoinWaitlistModal()
+  const { isOpen: isWaitlistModalOpen, close: closeWaitlistModal } = useJoinWaitlistModal()
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<RoleValue>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -18,25 +18,25 @@ export function JoinWaitlistModal() {
 
   // reset the form when the modal is closed
   useEffect(() => {
-    if (!isOpen) {
+    if (!isWaitlistModalOpen) {
       setEmail('')
       setRole('')
       setIsSubmitting(false)
       setIsSuccess(false)
       setErrorMessage('')
     }
-  }, [isOpen])
+  }, [isWaitlistModalOpen])
 
   // close the modal on escape key press
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        close()
+        closeWaitlistModal()
       }
     }
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [close])
+  }, [closeWaitlistModal])
 
   async function onJoinWaitlist(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -69,12 +69,12 @@ export function JoinWaitlistModal() {
     <div
       className={cn(
         'fixed inset-0 z-[100] flex items-center justify-center px-4 transition-all duration-200',
-        isOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        isWaitlistModalOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
       )}
     >
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={close}
+        onClick={closeWaitlistModal}
         aria-hidden="true"
       />
 
@@ -84,11 +84,11 @@ export function JoinWaitlistModal() {
         aria-labelledby="modal-title"
         className={cn(
           'relative z-10 w-full max-w-md rounded-xl border border-border bg-background p-8 shadow-2xl transition-all duration-200',
-          isOpen ? 'scale-100' : 'scale-95'
+          isWaitlistModalOpen ? 'scale-100' : 'scale-95'
         )}
       >
         <button
-          onClick={close}
+          onClick={closeWaitlistModal}
           aria-label="Close"
           className="absolute top-4 right-4 text-muted-foreground transition-colors hover:text-foreground"
         >

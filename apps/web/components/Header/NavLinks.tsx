@@ -14,7 +14,7 @@ const NAV_ITEMS = [
 
 export function NavLinks() {
   const pathname = usePathname()
-  const { open } = useJoinWaitlistModal()
+  const { open: openWaitlistModal } = useJoinWaitlistModal()
 
   return (
     <nav className="hidden items-center gap-8 md:flex">
@@ -36,7 +36,7 @@ export function NavLinks() {
         )
       })}
       <button
-        onClick={open}
+        onClick={openWaitlistModal}
         className="text-sm text-blue-400 transition-colors hover:text-blue-300"
       >
         Get Started

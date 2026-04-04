@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 
 export function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { open: openModal } = useJoinWaitlistModal()
+  const { open: openWaitlistModal } = useJoinWaitlistModal()
   const pathname = usePathname()
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -77,7 +77,7 @@ export function NavMenu() {
           <button
             onClick={() => {
               setIsMenuOpen(false)
-              openModal()
+              openWaitlistModal()
             }}
             className="cursor-pointer rounded-md px-3 py-2 text-left text-sm text-blue-400 transition-colors hover:bg-accent hover:text-blue-300"
           >
