@@ -51,7 +51,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={cn('font-sans', geist.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider
+          attribute="data-theme"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          enableColorScheme={false}
+        >
           <div className="flex min-h-screen flex-col">
             <Header />
             {children}

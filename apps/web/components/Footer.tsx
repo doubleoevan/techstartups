@@ -49,7 +49,7 @@ export function Footer() {
   const pathname = usePathname()
 
   return (
-    <footer className="border-t border-border">
+    <footer>
       <div className="mx-auto max-w-6xl px-4 py-6">
         {/* social icons */}
         <div className="mb-4 flex flex-wrap items-center justify-center gap-5">

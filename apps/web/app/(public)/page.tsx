@@ -202,10 +202,6 @@ export default function HomePage() {
     <div className="flex flex-col" onClick={() => setUserType(null)}>
       {/* Hero section */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
-        <span className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
-          Early access
-        </span>
-
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           Startup Intelligence,
           <span className="block text-primary">{"before it's obvious."}</span>
@@ -244,7 +240,7 @@ export default function HomePage() {
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="your@email.com"
                 required
-                className="flex-1"
+                className="flex-1 bg-card"
               />
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? 'Joining…' : 'Join waitlist'}
