@@ -1,12 +1,26 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
-import { Geist } from 'next/font/google'
+import { Oxanium, Figtree } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { Header } from '@/components/Header'
 import { JoinWaitlistModal } from '@/components/JoinWaitlistModal/JoinWaitlistModal'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+// display font for headings
+const oxanium = Oxanium({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-oxanium',
+  display: 'swap',
+})
+
+// body font for paragraph and ui text
+const figtree = Figtree({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-figtree',
+  display: 'swap',
+})
 
 export const viewport: Viewport = {
   themeColor: [
@@ -49,7 +63,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn('font-sans', geist.variable)} suppressHydrationWarning>
+    <html lang="en" className={cn(oxanium.variable, figtree.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider
           attribute="data-theme"
