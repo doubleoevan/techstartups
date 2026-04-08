@@ -84,9 +84,9 @@
 }
 
 [data-theme='dark'] {
-  --background: oklch(0.18 0.035 257); /* dark navy, not near-black */
+  --background: oklch(0.18 0.035 257);
   --foreground: oklch(0.93 0.008 257);
-  --card: oklch(0.22 0.035 257); /* lighter navy surface */
+  --card: oklch(0.22 0.035 257);
   --card-foreground: oklch(0.93 0.008 257);
   --popover: oklch(0.22 0.035 257);
   --popover-foreground: oklch(0.93 0.008 257);
@@ -117,6 +117,35 @@
   --sidebar-ring: oklch(0.62 0.23 254);
   --color-primary: oklch(0.62 0.23 254);
   --color-ring: oklch(0.62 0.23 254);
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+}
+
+[data-theme='dark'] body::before,
+[data-theme='light'] body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: 60%;
+  background-position: top left;
+  background-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at top left, black 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 65% at top left, black 0%, transparent 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+[data-theme='dark'] body::before {
+  background-image: url('/images/bg-dark.png');
+  opacity: 0.5;
+}
+
+[data-theme='light'] body::before {
+  background-image: url('/images/bg-light.png');
+  opacity: 0.5;
 }
 
 @layer base {

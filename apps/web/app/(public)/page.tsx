@@ -207,7 +207,7 @@ export default function HomePage() {
           <span className="block text-primary">{"before it's obvious."}</span>
         </h1>
 
-        <p className="max-w-2xl text-lg text-muted-foreground transition-all duration-300">
+        <p className="max-w-2xl text-lg transition-all duration-300">
           Real momentum signals for job seekers, founders, and investors — powered by AI.
         </p>
 
@@ -252,7 +252,7 @@ export default function HomePage() {
             </p>
           )}
           {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs">
             14-day free trial at launch · No credit card needed to join the waitlist
           </p>
         </div>
@@ -278,13 +278,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <hr className="border-border" />
-
       {/* Pricing plans */}
       <section id="pricing" className="mx-auto w-full max-w-6xl px-4 py-16">
         <div className="mb-8 text-center">
           <h2 className="mb-2 text-3xl font-bold tracking-tight">Simple, transparent pricing</h2>
-          <p className="text-muted-foreground">Pick your role. Combine any way you want.</p>
+          <p>Pick your role. Combine any way you want.</p>
         </div>
 
         <div className="mx-auto mb-8 flex w-fit max-w-2xl items-start gap-3 rounded-xl border border-green-600/30 bg-green-500/10 px-5 py-4 text-sm text-green-700 dark:border-green-500/25 dark:text-green-400">

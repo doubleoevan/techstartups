@@ -14,10 +14,8 @@ export default function AboutPage() {
       {/* hero */}
       <section className="mb-10">
         <h1 className="mb-4 text-3xl font-bold tracking-tight">About</h1>
-        <p className="mb-4 text-lg text-muted-foreground">
-          {"Startup intelligence, before it's obvious."}
-        </p>
-        <p className="text-muted-foreground">
+        <p className="mb-4 text-lg">{"Startup intelligence, before it's obvious."}</p>
+        <p>
           {
             "The startup landscape moves fast. By the time a company shows up in a headline, the opportunity has already passed. TechStartups.ai exists to surface what's happening next — not what already happened."
           }
@@ -29,12 +27,12 @@ export default function AboutPage() {
       {/* the gap */}
       <section className="my-10">
         <h2 className="mb-4 text-xl font-bold tracking-tight">The Gap</h2>
-        <p className="mb-4 text-muted-foreground">
+        <p className="mb-4">
           {
             "The startup ecosystem has great tools for tracking what's already happened — funding rounds, headcounts, acquisitions. That historical record is essential, and it's well-served."
           }
         </p>
-        <p className="text-muted-foreground">
+        <p>
           {
             "What's harder to find is what's happening next. The early signals that a company is gaining momentum. The patterns that predict a breakout before it makes headlines. That forward-looking layer is what's been missing — and it's what we're building."
           }
@@ -46,15 +44,13 @@ export default function AboutPage() {
       {/* our approach */}
       <section className="my-10">
         <h2 className="mb-4 text-xl font-bold tracking-tight">Our Approach</h2>
-        <p className="mb-4 text-muted-foreground">
-          {'Forward-looking signals, not backward-looking records.'}
-        </p>
-        <p className="mb-6 text-muted-foreground">
+        <p className="mb-4">{'Forward-looking signals, not backward-looking records.'}</p>
+        <p className="mb-6">
           {
             'We built TechStartups.ai around a simple premise: the most valuable startup intelligence is predictive. Our AI continuously harvests signals across hiring patterns, product launches, market positioning, and hundreds of other indicators to generate a real-time picture of where a company is heading.'
           }
         </p>
-        <ul className="flex flex-col gap-3 text-muted-foreground">
+        <ul className="flex flex-col gap-3">
           <li>
             <strong className="text-foreground">Momentum Score</strong>
             {
@@ -81,8 +77,8 @@ export default function AboutPage() {
       {/* who it's for */}
       <section className="my-10">
         <h2 className="mb-4 text-xl font-bold tracking-tight">{"Who It's For"}</h2>
-        <p className="mb-6 text-muted-foreground">Three audiences. One platform.</p>
-        <ul className="flex flex-col gap-3 text-muted-foreground">
+        <p className="mb-6">Three audiences. One platform.</p>
+        <ul className="flex flex-col gap-3">
           <li>
             <strong className="text-foreground">Job Seekers</strong>
             {
@@ -109,7 +105,7 @@ export default function AboutPage() {
       {/* call to action */}
       <section className="mt-10">
         <h2 className="mb-4 text-xl font-bold tracking-tight">{"See what's next."}</h2>
-        <p className="mb-6 text-muted-foreground">
+        <p className="mb-6">
           Join the waitlist for early access to startup intelligence that looks forward, not back.
         </p>
         <div className="flex justify-center">
