@@ -270,8 +270,9 @@ export default function HomePage() {
                 userType && userType !== id ? 'opacity-40' : 'opacity-100'
               )}
             >
-              <div className="mb-3 text-3xl">{icon}</div>
-              <h3 className="mb-2 font-semibold">{label}</h3>
+              <h3 className="mb-2 flex items-center gap-2 font-semibold">
+                <span className="text-2xl">{icon}</span> {label}
+              </h3>
               <p className="text-sm text-muted-foreground">{description}</p>
             </div>
           ))}
