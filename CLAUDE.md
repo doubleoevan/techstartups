@@ -64,6 +64,19 @@ techstartupsai/
 | `/dashboard/investor` | `app/(app)/dashboard/investor/page.tsx` | `InvestorDashboardPage` | Pending     |
 | `/settings`           | `app/(app)/settings/page.tsx`           | `SettingsPage`          | Pending     |
 
+## Test conventions
+
+- Each `*.test.ts` file is self-contained and readable in isolation. Prefer slight duplication over clever abstraction.
+- Global setup (env vars, `vi.clearAllMocks()`) lives in `apps/web/test/setup.ts`, wired in via `vitest.config.mts` `setupFiles`.
+- Mocks for the route under test live in the test file itself, not extracted into shared helpers.
+- Route-specific `beforeEach` defaults (e.g. "happy path returns success") stay in the test file — what counts as the happy path varies per route.
+- **Rule of three:** don't extract a test helper until the same pattern appears in 3+ files. With two examples you're guessing at the abstraction; with three you can see the shape.
+- DRY applies less to tests than to production code. The right amount of test boilerplate is whatever lets a reader understand a single test by reading only that test.
+- **Colocated test files:** `route.test.ts` next to `route.ts` (or `route.tsx`). No `__tests__/` directories.
+- **Mocking:** use `vi.mock()` at the import boundary, scoped per test file. No shared global mock state — tests must be isolated.
+- **Environment:** API route tests use Vitest with `environment: 'node'` (not jsdom).
+- **Runner:** `pnpm test` at root runs all tests via Turborepo.
+
 ## Coding conventions
 
 - **Tailwind only** — no inline styles, no CSS modules, no hardcoded hex values
