@@ -19,6 +19,7 @@ techstartupsai/
 ├── apps/
 │   ├── web/              ← Next.js 14 App Router (frontend + API routes)
 │   └── ai-service/       ← AI inference jobs (TypeScript + Python sidecar)
+├── emails/               ← React Email templates (@techstartups/emails), shared across apps
 ├── packages/
 │   ├── ui/               ← shadcn/ui components (@techstartups/ui)
 │   ├── db/               ← Supabase client + generated types (@techstartups/db)
