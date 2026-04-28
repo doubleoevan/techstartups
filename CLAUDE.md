@@ -36,7 +36,7 @@ techstartupsai/
 - **next-themes** — dark/light toggle, system preference + localStorage
 - **Supabase** — PostgreSQL, auth (email + Google OAuth), RLS
 - **Stripe** — subscriptions, one per user type per user
-- **Turborepo + pnpm workspaces** — build caching, shared packages
+- **Turborepo + Bun workspaces** — build caching, shared packages
 - **Vercel** — apps/web deployment
 - **Railway** — apps/ai-service deployment
 - **Langfuse** — AI observability (traces, cost, evals)
@@ -75,7 +75,7 @@ techstartupsai/
 - **Colocated test files:** `route.test.ts` next to `route.ts` (or `route.tsx`). No `__tests__/` directories.
 - **Mocking:** use `vi.mock()` at the import boundary, scoped per test file. No shared global mock state — tests must be isolated.
 - **Environment:** API route tests use Vitest with `environment: 'node'` (not jsdom).
-- **Runner:** `pnpm test` at root runs all tests via Turborepo.
+- **Runner:** `bun run test` at root runs all tests via Turborepo.
 
 ## Coding conventions
 

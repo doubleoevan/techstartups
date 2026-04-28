@@ -10,7 +10,7 @@ dist
 build
 
 # generated
-pnpm-lock.yaml
+bun.lock
 
 # Supabase
 supabase/.branches

@@ -1,7 +1,12 @@
 {
   "name": "techstartups",
   "private": true,
-  "packageManager": "pnpm@10.26.1",
+  "packageManager": "bun@1.3.13",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "emails"
+  ],
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
@@ -9,11 +14,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "db:link": "dotenv -e .env.local -- sh -c 'supabase link --project-ref $SUPABASE_PROJECT_REF'",
-    "db:push": "dotenv -e .env.local -- supabase db push",
-    "db:reset": "dotenv -e .env.local -- supabase db reset",
+    "db:link": "bunx dotenv -e .env.local -- sh -c 'supabase link --project-ref $SUPABASE_PROJECT_REF'",
+    "db:push": "bunx dotenv -e .env.local -- supabase db push",
+    "db:reset": "bunx dotenv -e .env.local -- supabase db reset",
     "test": "turbo test",
-    "email:dev": "pnpm --filter @techstartups/emails dev"
+    "email:dev": "bun run --filter @techstartups/emails dev"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",

@@ -7,13 +7,13 @@ Startup intelligence platform for job seekers, founders, and investors.
 - **Next.js 14 App Router** — `apps/web`
 - **Supabase** — Postgres, Auth, RLS
 - **Stripe** — subscriptions
-- **Turborepo + pnpm workspaces** — monorepo
+- **Turborepo + Bun workspaces** — monorepo
 
 ## Getting started
 
 ```bash
-pnpm install
-pnpm dev
+bun install
+bun run dev
 ```
 
 Copy `apps/web/.env.example` → `apps/web/.env.local` and fill in values.
@@ -46,7 +46,7 @@ All schema changes are version-controlled as SQL files in `supabase/migrations/`
 
 4. Link this repo to the hosted project:
    ```bash
-   pnpm db:link
+   bun run db:link
    ```
    You will be prompted for the database password — find it in the Supabase dashboard under **Settings → Database**.
 
@@ -62,13 +62,13 @@ All schema changes are version-controlled as SQL files in `supabase/migrations/`
 
 3. Push to prod:
    ```bash
-   pnpm db:push
+   bun run db:push
    ```
 
 ### Scripts
 
-| Script          | What it does                                                     |
-| --------------- | ---------------------------------------------------------------- |
-| `pnpm db:link`  | Links repo to hosted Supabase project (run once per machine)     |
-| `pnpm db:push`  | Applies all pending migrations to prod                           |
-| `pnpm db:reset` | Resets the local Supabase instance and re-applies all migrations |
+| Script             | What it does                                                     |
+| ------------------ | ---------------------------------------------------------------- |
+| `bun run db:link`  | Links repo to hosted Supabase project (run once per machine)     |
+| `bun run db:push`  | Applies all pending migrations to prod                           |
+| `bun run db:reset` | Resets the local Supabase instance and re-applies all migrations |
