@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // hoisted mocks — available before vi.mock() factories execute
 const mocks = vi.hoisted(() => {
@@ -441,5 +441,67 @@ describe('POST /api/waitlist', () => {
 
     // update should only clear unsubscribed_at — user_types not included (preserving existing)
     expect(mocks.mockUpdate).toHaveBeenCalledWith({ unsubscribed_at: null })
+  })
+
+  // --- turnstile verification tests ---
+  describe('with TURNSTILE_SECRET_KEY set', () => {
+    beforeEach(() => {
+      vi.stubEnv('TURNSTILE_SECRET_KEY', 'test-secret-key')
+      vi.spyOn(global, 'fetch').mockResolvedValue(
+        new Response(JSON.stringify({ success: true }), { status: 200 })
+      )
+    })
+
+    afterEach(() => {
+      vi.unstubAllEnvs()
+      vi.restoreAllMocks()
+    })
+
+    it('returns 200 when a valid turnstile token is provided', async () => {
+      const request = createRequest({
+        email: 'verified@example.com',
+        turnstileToken: 'valid-token',
+      })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ secret: 'test-secret-key', response: 'valid-token' }),
+        })
+      )
+      expect(mocks.mockInsert).toHaveBeenCalled()
+    })
+
+    it('returns 400 when the turnstile token is invalid', async () => {
+      vi.spyOn(global, 'fetch').mockResolvedValue(
+        new Response(JSON.stringify({ success: false }), { status: 200 })
+      )
+
+      const request = createRequest({
+        email: 'bot@example.com',
+        turnstileToken: 'invalid-token',
+      })
+      const response = await POST(request)
+
+      expect(response.status).toBe(400)
+      const body = await response.json()
+      expect(body).toEqual({ error: 'Verification failed. Please try again.' })
+      expect(mocks.mockInsert).not.toHaveBeenCalled()
+      expect(mocks.mockEmailSend).not.toHaveBeenCalled()
+    })
+
+    it('returns 400 when the turnstile token is missing', async () => {
+      const request = createRequest({ email: 'notoken@example.com' })
+      const response = await POST(request)
+
+      expect(response.status).toBe(400)
+      const body = await response.json()
+      expect(body).toEqual({ error: 'Verification failed. Please try again.' })
+      expect(mocks.mockInsert).not.toHaveBeenCalled()
+      expect(mocks.mockEmailSend).not.toHaveBeenCalled()
+    })
   })
 })

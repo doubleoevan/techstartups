@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import {
@@ -32,6 +33,8 @@ const USER_TYPE_LABELS: Record<UserTypeValue, string> = {
   investor: 'Investor',
 }
 
+const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
 export function JoinWaitlistModal() {
   const { isOpen: isWaitlistModalOpen, close: closeWaitlistModal } = useJoinWaitlistModal()
   const [email, setEmail] = useState('')
@@ -40,6 +43,7 @@ export function JoinWaitlistModal() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const rolesRef = useComboboxAnchor()
+  const turnstileRef = useRef<TurnstileInstance>(null)
 
   // reset the form when the modal is closed
   useEffect(() => {
@@ -49,6 +53,7 @@ export function JoinWaitlistModal() {
       setIsSubmitting(false)
       setIsSuccess(false)
       setErrorMessage('')
+      turnstileRef.current?.reset()
     }
   }, [isWaitlistModalOpen])
 
@@ -68,6 +73,9 @@ export function JoinWaitlistModal() {
     setIsSubmitting(true)
     setErrorMessage('')
 
+    // grab the turnstile token at submit time
+    const turnstileToken = turnstileRef.current?.getResponse()
+
     // submit the waitlist form
     try {
       const response = await fetch('/api/waitlist', {
@@ -76,6 +84,7 @@ export function JoinWaitlistModal() {
         body: JSON.stringify({
           email,
           userTypes: selectedTypes.length > 0 ? selectedTypes : undefined,
+          turnstileToken,
         }),
       })
 
@@ -90,6 +99,7 @@ export function JoinWaitlistModal() {
       setErrorMessage('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
+      turnstileRef.current?.reset()
     }
   }
 
@@ -174,12 +184,18 @@ export function JoinWaitlistModal() {
               </Combobox>
             </div>
 
+            {turnstileSiteKey && (
+              <div className="flex justify-center">
+                <Turnstile ref={turnstileRef} siteKey={turnstileSiteKey} />
+              </div>
+            )}
+
             {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-lg bg-primary py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 disabled:opacity-50"
+              className="self-center rounded-lg bg-primary px-8 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 disabled:opacity-50"
             >
               {isSubmitting ? 'Joining…' : 'Join waitlist'}
             </button>

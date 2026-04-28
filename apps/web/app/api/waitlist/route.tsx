@@ -6,6 +6,7 @@ import { render } from 'react-email'
 import { z } from 'zod'
 import WaitlistConfirmation from '@techstartups/emails/WaitlistConfirmation'
 import AdminSignupNotification from '@techstartups/emails/AdminSignupNotification'
+import { verifyTurnstileToken } from '@/lib/turnstile'
 
 const POSTGRES_UNIQUE_VIOLATION = '23505'
 
@@ -14,6 +15,7 @@ const userTypeEnum = z.enum(['job_seeker', 'founder', 'investor'])
 const waitlistSchema = z.object({
   email: z.email('Invalid email address'),
   userTypes: z.array(userTypeEnum).min(1).max(3).optional(),
+  turnstileToken: z.string().optional(),
 })
 
 export async function POST(request: Request) {
@@ -24,8 +26,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
   }
 
+  // verify the turnstile token
+  const { email, userTypes, turnstileToken } = result.data
+  const isHuman = await verifyTurnstileToken(turnstileToken)
+  if (!isHuman) {
+    return NextResponse.json({ error: 'Verification failed. Please try again.' }, { status: 400 })
+  }
+
   // create a new waitlist entry
-  const { email, userTypes } = result.data
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SECRET_KEY!
