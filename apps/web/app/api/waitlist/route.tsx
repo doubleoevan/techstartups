@@ -9,9 +9,11 @@ import AdminSignupNotification from '@techstartups/emails/AdminSignupNotificatio
 
 const POSTGRES_UNIQUE_VIOLATION = '23505'
 
+const userTypeEnum = z.enum(['job_seeker', 'founder', 'investor'])
+
 const waitlistSchema = z.object({
   email: z.email('Invalid email address'),
-  user_type: z.string().nullable().optional(),
+  userTypes: z.array(userTypeEnum).min(1).max(3).optional(),
 })
 
 export async function POST(request: Request) {
@@ -23,12 +25,16 @@ export async function POST(request: Request) {
   }
 
   // create a new waitlist entry
-  const { email, user_type } = result.data
+  const { email, userTypes } = result.data
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SECRET_KEY!
   )
-  const { error: insertError } = await supabase.from('waitlist').insert({ email })
+  const insertData: Record<string, unknown> = { email }
+  if (userTypes) {
+    insertData.user_types = userTypes
+  }
+  const { error: insertError } = await supabase.from('waitlist').insert(insertData)
 
   // handle errors
   if (insertError) {
@@ -36,7 +42,7 @@ export async function POST(request: Request) {
       // check if the user previously unsubscribed
       const { data: existing, error: selectError } = await supabase
         .from('waitlist')
-        .select('unsubscribed_at')
+        .select('unsubscribed_at, user_types')
         .eq('email', email)
         .single()
 
@@ -45,22 +51,31 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Already on the waitlist' }, { status: 409 })
       }
 
+      // build the update payload
+      const updateData: Record<string, unknown> = {}
       if (existing?.unsubscribed_at) {
-        // resubscribe by clearing unsubscribed_at
-        const { error: resubscribeError } = await supabase
-          .from('waitlist')
-          .update({ unsubscribed_at: null })
-          .eq('email', email)
+        updateData.unsubscribed_at = null
+      }
+      if (userTypes) {
+        updateData.user_types = userTypes
+      }
 
-        if (resubscribeError) {
-          Sentry.captureException(resubscribeError)
-          return NextResponse.json(
-            { error: 'Failed to join the waitlist. Please try again.' },
-            { status: 500 }
-          )
-        }
-      } else {
+      // nothing to update — active subscriber with no new types
+      if (Object.keys(updateData).length === 0) {
         return NextResponse.json({ error: 'Already on the waitlist' }, { status: 409 })
+      }
+
+      const { error: updateError } = await supabase
+        .from('waitlist')
+        .update(updateData)
+        .eq('email', email)
+
+      if (updateError) {
+        Sentry.captureException(updateError)
+        return NextResponse.json(
+          { error: 'Failed to join the waitlist. Please try again.' },
+          { status: 500 }
+        )
       }
     } else {
       Sentry.captureException(insertError)
@@ -71,13 +86,19 @@ export async function POST(request: Request) {
     }
   }
 
+  // build the admin notification email subject
+  const adminSubject =
+    userTypes && userTypes.length > 0
+      ? `New waitlist signup (${userTypes.join(', ')}): ${email}`
+      : 'New waitlist signup'
+
   // render and send the waitlist confirmation and notification emails
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!
   const resend = new Resend(process.env.RESEND_API_KEY)
   try {
     const [confirmationHtml, notificationHtml] = await Promise.all([
       render(<WaitlistConfirmation email={email} siteUrl={siteUrl} />),
-      render(<AdminSignupNotification email={email} userType={user_type ?? undefined} />),
+      render(<AdminSignupNotification email={email} userTypes={userTypes} />),
     ])
 
     await Promise.all([
@@ -93,7 +114,7 @@ export async function POST(request: Request) {
       resend.emails.send({
         from: 'TechStartups AI <hello@techstartups.ai>',
         to: 'evan@techstartups.ai',
-        subject: 'New waitlist signup',
+        subject: adminSubject,
         html: notificationHtml,
       }),
     ])

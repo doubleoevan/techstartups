@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { GetEarlyAccessButton } from '@/components/GetEarlyAccessButton'
 
 // static metadata injected into <head> by Next.js at build time
 export const metadata: Metadata = {
@@ -20,8 +21,9 @@ export default function BlogPage() {
         <p className="max-w-xs text-sm">
           {"We're working on our first posts."}
           <br />
-          Check back at soon...
+          Check back soon...
         </p>
+        <GetEarlyAccessButton />
       </div>
     </div>
   )

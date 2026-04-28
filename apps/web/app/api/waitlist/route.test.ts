@@ -136,7 +136,7 @@ describe('POST /api/waitlist', () => {
     )
   })
 
-  it('returns 409 for a duplicate active email', async () => {
+  it('returns 409 for a duplicate active email with no new types', async () => {
     // insert fails with unique violation
     mocks.mockInsert.mockReturnValue({
       error: { code: '23505', message: 'duplicate key' },
@@ -155,6 +155,33 @@ describe('POST /api/waitlist', () => {
     const body = await response.json()
     expect(body).toEqual({ error: 'Already on the waitlist' })
     expect(mocks.mockEmailSend).not.toHaveBeenCalled()
+  })
+
+  it('updates user types for a duplicate active email when new types are provided', async () => {
+    // insert fails with unique violation
+    mocks.mockInsert.mockReturnValue({
+      error: { code: '23505', message: 'duplicate key' },
+    })
+
+    // existing row is active with old types
+    mocks.mockSingle.mockReturnValue({
+      data: { unsubscribed_at: null, user_types: ['job_seeker'] },
+      error: null,
+    })
+
+    mocks.mockUpdateEq.mockReturnValue({ error: null })
+
+    const request = createRequest({
+      email: 'existing@example.com',
+      userTypes: ['founder', 'investor'],
+    })
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+    expect(mocks.mockUpdate).toHaveBeenCalledWith({
+      user_types: ['founder', 'investor'],
+    })
+    expect(mocks.mockEmailSend).toHaveBeenCalledTimes(2)
   })
 
   it('re-subscribes a previously unsubscribed email and preserves the existing row', async () => {
@@ -272,5 +299,147 @@ describe('POST /api/waitlist', () => {
     const body = await response.json()
     expect(body).toEqual({ success: true })
     expect(mocks.mockCaptureException).toHaveBeenCalledWith(expect.any(Error))
+  })
+
+  // --- userTypes tests ---
+
+  it('inserts a new signup with a single user type', async () => {
+    const request = createRequest({ email: 'founder@example.com', userTypes: ['founder'] })
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+    expect(mocks.mockInsert).toHaveBeenCalledWith({
+      email: 'founder@example.com',
+      user_types: ['founder'],
+    })
+
+    // admin email subject includes the type
+    expect(mocks.mockEmailSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'evan@techstartups.ai',
+        subject: 'New waitlist signup (founder): founder@example.com',
+      })
+    )
+  })
+
+  it('inserts a new signup with multiple user types', async () => {
+    const request = createRequest({
+      email: 'multi@example.com',
+      userTypes: ['founder', 'investor'],
+    })
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+    expect(mocks.mockInsert).toHaveBeenCalledWith({
+      email: 'multi@example.com',
+      user_types: ['founder', 'investor'],
+    })
+
+    // admin email subject includes all types
+    expect(mocks.mockEmailSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'evan@techstartups.ai',
+        subject: 'New waitlist signup (founder, investor): multi@example.com',
+      })
+    )
+  })
+
+  it('inserts a new signup without user types when none are provided', async () => {
+    const request = createRequest({ email: 'notype@example.com' })
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+    // insert should not include user_types key
+    expect(mocks.mockInsert).toHaveBeenCalledWith({ email: 'notype@example.com' })
+
+    // admin email subject has no types
+    expect(mocks.mockEmailSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'evan@techstartups.ai',
+        subject: 'New waitlist signup',
+      })
+    )
+  })
+
+  it('returns 400 for an empty userTypes array', async () => {
+    const request = createRequest({ email: 'empty@example.com', userTypes: [] })
+    const response = await POST(request)
+
+    expect(response.status).toBe(400)
+    expect(mocks.mockInsert).not.toHaveBeenCalled()
+  })
+
+  it('returns 400 for an invalid user type value', async () => {
+    const request = createRequest({ email: 'bad@example.com', userTypes: ['admin'] })
+    const response = await POST(request)
+
+    expect(response.status).toBe(400)
+    expect(mocks.mockInsert).not.toHaveBeenCalled()
+  })
+
+  it('updates user types on re-subscribe when new types are provided', async () => {
+    // insert fails with unique violation
+    mocks.mockInsert.mockReturnValue({
+      error: { code: '23505', message: 'duplicate key' },
+    })
+
+    // existing row is unsubscribed with old user_types
+    mocks.mockSingle.mockReturnValue({
+      data: {
+        unsubscribed_at: '2025-06-01T00:00:00Z',
+        user_types: ['job_seeker'],
+      },
+      error: null,
+    })
+
+    mocks.mockUpdateEq.mockReturnValue({ error: null })
+
+    const request = createRequest({
+      email: 'returning@example.com',
+      userTypes: ['founder', 'investor'],
+    })
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+
+    // update should include new user_types alongside clearing unsubscribed_at
+    expect(mocks.mockUpdate).toHaveBeenCalledWith({
+      unsubscribed_at: null,
+      user_types: ['founder', 'investor'],
+    })
+
+    // admin email subject includes the new types
+    expect(mocks.mockEmailSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'evan@techstartups.ai',
+        subject: 'New waitlist signup (founder, investor): returning@example.com',
+      })
+    )
+  })
+
+  it('preserves existing user types on re-subscribe when no types are provided', async () => {
+    // insert fails with unique violation
+    mocks.mockInsert.mockReturnValue({
+      error: { code: '23505', message: 'duplicate key' },
+    })
+
+    // existing row is unsubscribed with existing user_types
+    mocks.mockSingle.mockReturnValue({
+      data: {
+        unsubscribed_at: '2025-06-01T00:00:00Z',
+        user_types: ['job_seeker', 'founder'],
+      },
+      error: null,
+    })
+
+    mocks.mockUpdateEq.mockReturnValue({ error: null })
+
+    const request = createRequest({ email: 'returning@example.com' })
+    const response = await POST(request)
+
+    expect(response.status).toBe(200)
+
+    // update should only clear unsubscribed_at — user_types not included (preserving existing)
+    expect(mocks.mockUpdate).toHaveBeenCalledWith({ unsubscribed_at: null })
   })
 })

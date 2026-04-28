@@ -2,8 +2,10 @@
 
 import { useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
-import { Button, Input } from '@techstartups/ui'
+import { Button } from '@techstartups/ui'
 import { cn } from '@/lib/utils'
+import { GetEarlyAccessButton } from '@/components/GetEarlyAccessButton'
+import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 
 type UserType = 'jobSeeker' | 'founder' | 'investor'
 
@@ -151,55 +153,25 @@ const USER_TIERS: UserTier[] = [
 ]
 
 export default function HomePage() {
-  const [userType, setUserType] = useState<UserType | null>(null)
-  const [email, setEmail] = useState('')
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [selectedUserTypes, setSelectedUserTypes] = useState<UserType[]>([])
+  const { open: openWaitlistModal } = useJoinWaitlistModal()
 
-  // handles user type click
+  // handles user type click — toggles the type on or off
   function onClickUserType(event: React.MouseEvent, type: UserType) {
     event.stopPropagation()
-    const next = userType === type ? null : type
-    setUserType(next)
-    if (next) {
+    const isSelected = selectedUserTypes.includes(type)
+    if (isSelected) {
+      setSelectedUserTypes(selectedUserTypes.filter((userType) => userType !== type))
+    } else {
+      setSelectedUserTypes([...selectedUserTypes, type])
       document
-        .getElementById(`pricing-${next}`)
+        .getElementById(`pricing-${type}`)
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
-  // handles waitlist form submit
-  async function onJoinWaitlist(event: React.SubmitEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (!email || isLoading) {
-      return
-    }
-    setIsLoading(true)
-    setErrorMessage(null)
-
-    // submit waitlist form
-    try {
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, user_type: userType }),
-      })
-      if (response.ok) {
-        setIsSubmitted(true)
-      } else {
-        const data = (await response.json()) as { error?: string }
-        setErrorMessage(data.error ?? 'Something went wrong. Please try again.')
-      }
-    } catch {
-      setErrorMessage('Something went wrong. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
-    <div className="flex flex-col" onClick={() => setUserType(null)}>
+    <div className="flex flex-col" onClick={() => setSelectedUserTypes([])}>
       {/* Hero section */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
@@ -219,7 +191,7 @@ export default function HomePage() {
               onClick={(event) => onClickUserType(event, id)}
               className={cn(
                 'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
-                userType === id
+                selectedUserTypes.includes(id)
                   ? 'border-transparent bg-primary text-primary-foreground'
                   : 'border-border bg-card text-foreground hover:bg-muted'
               )}
@@ -229,29 +201,9 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* Waitlist form */}
-        <div id="waitlist" className="flex w-full max-w-md flex-col items-center gap-3">
-          {!isSubmitted ? (
-            <form onSubmit={onJoinWaitlist} className="flex w-full gap-2">
-              <Input
-                id="waitlist-email"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="your@email.com"
-                required
-                className="flex-1 bg-card"
-              />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Joining…' : 'Join waitlist'}
-              </Button>
-            </form>
-          ) : (
-            <p className="font-medium text-foreground">
-              {"You're on the list — we'll be in touch soon."}
-            </p>
-          )}
-          {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
+        {/* Waitlist CTA */}
+        <div className="flex w-full max-w-md flex-col items-center gap-3">
+          <GetEarlyAccessButton />
           <p className="text-xs">
             14-day free trial at launch · No credit card needed to join the waitlist
           </p>
@@ -267,7 +219,9 @@ export default function HomePage() {
               onClick={(event) => onClickUserType(event, id)}
               className={cn(
                 'cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300',
-                userType && userType !== id ? 'opacity-40' : 'opacity-100'
+                selectedUserTypes.length > 0 && !selectedUserTypes.includes(id)
+                  ? 'opacity-40'
+                  : 'opacity-100'
               )}
             >
               <h3 className="mb-2 flex items-center gap-2 font-semibold">
@@ -303,7 +257,9 @@ export default function HomePage() {
               id={`pricing-${id}`}
               className={cn(
                 'flex scroll-mt-20 flex-col gap-4 transition-opacity duration-300',
-                userType && userType !== id ? 'opacity-40' : 'opacity-100'
+                selectedUserTypes.length > 0 && !selectedUserTypes.includes(id)
+                  ? 'opacity-40'
+                  : 'opacity-100'
               )}
             >
               <div className="flex items-center gap-3">
@@ -353,11 +309,7 @@ export default function HomePage() {
                     <Button
                       variant={isPopular ? 'default' : 'outline'}
                       className="mt-auto w-full"
-                      onClick={() =>
-                        (
-                          document.getElementById('waitlist-email') as HTMLInputElement | null
-                        )?.focus({ preventScroll: false })
-                      }
+                      onClick={openWaitlistModal}
                     >
                       {price === null ? 'Get started free' : 'Join waitlist'}
                     </Button>

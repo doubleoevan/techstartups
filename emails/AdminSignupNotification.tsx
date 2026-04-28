@@ -2,11 +2,14 @@ import { Body, Container, Head, Html, Preview, Text } from 'react-email'
 
 interface AdminSignupNotificationProps {
   email: string
-  userType?: string
+  userTypes?: string[]
 }
 
 // notification email sent to admin when a new user joins the waitlist
-export default function AdminSignupNotification({ email, userType }: AdminSignupNotificationProps) {
+export default function AdminSignupNotification({
+  email,
+  userTypes,
+}: AdminSignupNotificationProps) {
   return (
     <Html>
       <Head />
@@ -17,7 +20,9 @@ export default function AdminSignupNotification({ email, userType }: AdminSignup
             <strong>{'New waitlist signup'}</strong>
           </Text>
           <Text>{`Email: ${email}`}</Text>
-          {userType ? <Text>{`User type: ${userType}`}</Text> : null}
+          {userTypes && userTypes.length > 0 ? (
+            <Text>{`User types: ${userTypes.join(', ')}`}</Text>
+          ) : null}
         </Container>
       </Body>
     </Html>

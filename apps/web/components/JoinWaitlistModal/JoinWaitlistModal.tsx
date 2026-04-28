@@ -3,24 +3,49 @@
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
+import {
+  Combobox,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxTrigger,
+  ComboboxValue,
+  useComboboxAnchor,
+} from '@/components/ui/combobox'
 
-type RoleValue = 'job_seeker' | 'founder' | 'investor' | ''
+type UserTypeValue = 'job_seeker' | 'founder' | 'investor'
 
 type WaitlistErrorResponse = { error?: string }
+
+const USER_TYPE_OPTIONS: { value: UserTypeValue; label: string }[] = [
+  { value: 'job_seeker', label: 'Job Seeker' },
+  { value: 'founder', label: 'Founder' },
+  { value: 'investor', label: 'Investor' },
+]
+
+const USER_TYPE_LABELS: Record<UserTypeValue, string> = {
+  job_seeker: 'Job Seeker',
+  founder: 'Founder',
+  investor: 'Investor',
+}
 
 export function JoinWaitlistModal() {
   const { isOpen: isWaitlistModalOpen, close: closeWaitlistModal } = useJoinWaitlistModal()
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState<RoleValue>('')
+  const [selectedTypes, setSelectedTypes] = useState<UserTypeValue[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const rolesRef = useComboboxAnchor()
 
   // reset the form when the modal is closed
   useEffect(() => {
     if (!isWaitlistModalOpen) {
       setEmail('')
-      setRole('')
+      setSelectedTypes([])
       setIsSubmitting(false)
       setIsSuccess(false)
       setErrorMessage('')
@@ -48,7 +73,10 @@ export function JoinWaitlistModal() {
       const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, user_type: role || null }),
+        body: JSON.stringify({
+          email,
+          userTypes: selectedTypes.length > 0 ? selectedTypes : undefined,
+        }),
       })
 
       // handle the response
@@ -121,20 +149,29 @@ export function JoinWaitlistModal() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="modal-role" className="text-sm text-muted-foreground">
-                Role (optional)
-              </label>
-              <select
-                id="modal-role"
-                value={role}
-                onChange={(event) => setRole(event.target.value as RoleValue)}
-                className="rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors outline-none focus:border-ring dark:[color-scheme:dark]"
-              >
-                <option value="">Select a role</option>
-                <option value="job_seeker">Job Seeker</option>
-                <option value="founder">Founder</option>
-                <option value="investor">Investor</option>
-              </select>
+              <label className="text-sm text-muted-foreground">{"I'm a... (optional)"}</label>
+              <Combobox multiple value={selectedTypes} onValueChange={setSelectedTypes}>
+                <ComboboxChips ref={rolesRef}>
+                  <ComboboxValue>
+                    {(values: UserTypeValue[]) =>
+                      values.map((value) => (
+                        <ComboboxChip key={value}>{USER_TYPE_LABELS[value]}</ComboboxChip>
+                      ))
+                    }
+                  </ComboboxValue>
+                  <ComboboxChipsInput placeholder="Select roles" />
+                  <ComboboxTrigger className="ml-auto shrink-0" />
+                </ComboboxChips>
+                <ComboboxContent anchor={rolesRef}>
+                  <ComboboxList>
+                    {USER_TYPE_OPTIONS.map((option) => (
+                      <ComboboxItem key={option.value} value={option.value}>
+                        {option.label}
+                      </ComboboxItem>
+                    ))}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
             </div>
 
             {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
